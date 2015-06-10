@@ -1,12 +1,16 @@
 library(readr)
 library(dplyr)
-library(gather)
 library(ggplot2)
 library(data.table)
 
 dfReplays <- read_csv("data/replays.csv")
 
 dfChars <- read_csv("data/chars.csv")
+
+ggplot(dfChars, aes(mmr_before)) + 
+  geom_histogram(binwidth = 50, fill = RColorBrewer::brewer.pal(2, "Paired")[2], colour = "black") + 
+  theme_bw() + xlab("MMR") + ylab("")
+
 
 dfDivisions <- data.frame(name = c("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master"),
                           low = c(-Inf, 1630, 1960, 2260, 2730, 3370),
@@ -65,6 +69,7 @@ dfPlotWinPercent <- dfWinPercent %>%
               mutate(outcome = "loss") %>% 
               rename(opponent = division_win)) %>% 
   mutate(opponent = factor(opponent, levels = dfDivisions$name))
+
 ggplot(dfPlotWinPercent, aes(opponent, prop, fill = outcome)) + geom_bar(stat = "identity")
 
 
